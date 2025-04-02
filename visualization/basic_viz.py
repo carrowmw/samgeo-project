@@ -139,3 +139,67 @@ def plot_segments_with_image(
         print(f"Image overlay visualization saved to {output_path}")
 
     return fig, ax, gdf
+
+
+def plot_segments_with_classification(
+    shapefile_path, output_path=None, title="Classified Segments"
+):
+    """
+    Create visualization with segments colored by their classification.
+
+    Args:
+        shapefile_path: Path to the classified shapefile
+        output_path: Path to save the visualization
+        title: Plot title
+
+    Returns:
+        fig: Matplotlib figure
+        ax: Matplotlib axis
+        gdf: GeoDataFrame with classified segments
+    """
+    # Read the shapefile
+    gdf = gpd.read_file(shapefile_path)
+
+    # Check if classification exists
+    if "class" not in gdf.columns:
+        print("Warning: No classification column found. Using basic visualization.")
+        return plot_segments_basic(shapefile_path, output_path, title)
+
+    # Create a categorical colormap
+    unique_classes = gdf["class"].unique()
+    class_cmap = plt.cm.get_cmap("tab20", len(unique_classes))
+
+    # Create a categorical column for coloring
+    gdf["class_cat"] = gdf["class"].astype("category").cat.codes
+
+    # Create plot
+    fig, ax = plt.subplots(figsize=config.VISUALIZATION_PARAMS["figsize"])
+
+    # Plot with class colors
+    gdf.plot(
+        ax=ax,
+        column="class_cat",
+        cmap=class_cmap,
+        categorical=True,
+        legend=True,
+        legend_kwds={"title": "Classification"},
+    )
+
+    # Create a custom legend with class names
+    handles = []
+    for i, class_name in enumerate(unique_classes):
+        patch = plt.Rectangle((0, 0), 1, 1, fc=class_cmap(i))
+        handles.append(patch)
+
+    ax.legend(handles, unique_classes, loc="upper right", title="Classification")
+
+    # Add styling
+    ax.set_title(title, fontsize=16)
+    ax.set_axis_off()
+
+    # Save if output path provided
+    if output_path:
+        plt.savefig(output_path, dpi=300, bbox_inches="tight")
+        print(f"Classification visualization saved to {output_path}")
+
+    return fig, ax, gdf

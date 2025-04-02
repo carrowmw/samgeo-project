@@ -12,8 +12,8 @@ import config
 
 # Import pipeline modules
 from .processor import process_image
-from .segmentation import initialise_sam_class
 from .vectorization import polygonise_raster_data, convert_pixel_to_geo_coords
+from .segmentation import initialise_sam_class
 
 
 def run_pipeline(
