@@ -1,0 +1,7 @@
+outputs/
+models/
+data/
+.venv/
+*.pth
+*.tif
+*.html
