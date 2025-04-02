@@ -28,8 +28,8 @@ SAM_MODEL_TYPE = "vit_h"  # Options: vit_h, vit_l, vit_b
 SAM_CHECKPOINT = os.path.join(MODEL_DIR, "sam_vit_h_4b8939.pth")
 
 # Image processing parameters
-SCALE_IMAGE = True  # Whether to scale the image
-SCALE_FACTOR = 0.25  # Scale factor for image resizing (0.5 = 50% of original size)
+SCALE_IMAGE = False  # Whether to scale the image
+SCALE_FACTOR = 1  # Scale factor for image resizing (0.5 = 50% of original size)
 
 # SAM segmentation parameters
 SAM_PARAMS = {
